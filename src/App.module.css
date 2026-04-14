@@ -388,7 +388,7 @@
   color: var(--accent);
   font-style: italic;
   display: inline-block;
-  animation: accentGrow 5s cubic-bezier(0.33, 1, 0.68, 1) 3s both;
+  animation: accentGrow 5s cubic-bezier(0.33, 1, 0.68, 1) 1s both;
 }
 
 .heroSub {
