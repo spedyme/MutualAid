@@ -8,13 +8,13 @@ export default function App() {
       {/* Nav */}
       <nav className={styles.nav}>
         <div className={styles.navInner}>
-          <span className={styles.logo}>FLUX</span>
+          <span className={styles.logo}>MUTUAL AID</span>
           <div className={styles.navLinks}>
-            <a href="#features" className={styles.navLink}>Workflows</a>
-            <a href="#how" className={styles.navLink}>Platform</a>
-            <a href="#start" className={styles.navLink}>Pricing</a>
+            <a href="#how" className={styles.navLink}>Approach</a>
+            <a href="#features" className={styles.navLink}>Solutions</a>
+            <a href="#start" className={styles.navLink}>Contact</a>
           </div>
-          <a href="#start" className={styles.navCta}>Start Building</a>
+          <a href="#start" className={styles.navCta}>Work With Us</a>
         </div>
       </nav>
 
@@ -22,19 +22,22 @@ export default function App() {
       <section className={styles.hero}>
         <div className={styles.heroBadge}>
           <span className={styles.badgeDot} />
-          AI Workflow Automation
+          AI Solutions · Enterprise &amp; Government
         </div>
         <h1 className={styles.heroTitle}>
-          Build workflows<br />
-          <span className={styles.heroAccent}>that think.</span>
+          AI is everywhere.<br />
+          <span className={styles.heroAccent}>Productivity isn't.</span>
         </h1>
         <p className={styles.heroSub}>
-          Orchestrate AI agents, data pipelines, and business logic into
-          seamless automated workflows — without writing a single line of glue code.
+          Robert Solow observed in 1987: computers everywhere, productivity nowhere.
+          The gains came only when organizations rebuilt their workflows around the
+          technology. AI is at that same inflection point. Mutual Aid builds the
+          workflows that close the gap — for enterprises and governments that
+          can't afford to wait a decade.
         </p>
         <div className={styles.heroActions}>
-          <a href="#start" className={styles.btnPrimary}>Start Building Free</a>
-          <a href="#how" className={styles.btnGhost}>Watch Demo →</a>
+          <a href="#start" className={styles.btnPrimary}>Start the Conversation</a>
+          <a href="#how" className={styles.btnGhost}>See Our Approach →</a>
         </div>
         <div className={styles.workflowPreview}>
           <WorkflowDiagram />
@@ -43,46 +46,48 @@ export default function App() {
 
       {/* Trust bar */}
       <div className={styles.trustBar}>
-        <span className={styles.trustLabel}>Trusted by teams at</span>
-        {['Stripe', 'Linear', 'Vercel', 'Supabase', 'Notion'].map(name => (
+        <span className={styles.trustLabel}>Deployed across</span>
+        {['Federal Agencies', 'State Government', 'Healthcare Systems', 'Financial Services', 'Enterprise'].map(name => (
           <span key={name} className={styles.trustName}>{name}</span>
         ))}
       </div>
 
       {/* Features */}
       <section className={styles.section} id="features">
-        <div className={styles.sectionLabel}>CAPABILITIES</div>
-        <h2 className={styles.sectionTitle}>Everything your workflow needs</h2>
+        <div className={styles.sectionLabel}>WHAT WE DO</div>
+        <h2 className={styles.sectionTitle}>
+          AI solutions engineered for organizations<br />that can't afford to get it wrong
+        </h2>
         <div className={styles.featureGrid}>
           <FeatureCard
             number="01"
-            title="Visual Orchestration"
-            description="Drag-and-drop workflow builder with real-time execution trace. See every decision your AI makes."
+            title="Workflow Architecture"
+            description="We design the operational layer where AI delivers outcomes, not just capability. The gap is always in the workflow — we close it."
           />
           <FeatureCard
             number="02"
-            title="Multi-Agent Coordination"
-            description="Spawn, chain, and parallelize AI agents. Each one specialized, all of them working together."
+            title="Government Integration"
+            description="Navigate procurement rules, compliance requirements, legacy infrastructure, and inter-agency complexity — without compromising mission."
           />
           <FeatureCard
             number="03"
-            title="Adaptive Routing"
-            description="Conditional logic that responds to AI output. Your workflow evolves as data changes."
+            title="Enterprise Deployment"
+            description="Purpose-built AI solutions that integrate with your existing stack, your security posture, and your people."
           />
           <FeatureCard
             number="04"
-            title="Integrations Built-in"
-            description="200+ native connectors. Plug into your existing stack in minutes, not months."
+            title="Change Management"
+            description="Technology is half the equation. We guide your organization through the cultural and operational transition that makes AI actually stick."
           />
           <FeatureCard
             number="05"
-            title="Observability First"
-            description="Full audit logs, latency breakdowns, and cost tracking for every workflow run."
+            title="Support Without Equal"
+            description="We don't hand off a product and walk away. We stay — as your operational partner through every phase, every obstacle, every iteration."
           />
           <FeatureCard
             number="06"
-            title="Enterprise Ready"
-            description="SOC 2 Type II, VPC isolation, SSO, and role-based access. Ship fast, stay compliant."
+            title="Continuous Evolution"
+            description="AI capability compounds. Your workflows evolve alongside it, with Mutual Aid at your side as both the technology and your needs change."
           />
         </div>
       </section>
@@ -90,27 +95,27 @@ export default function App() {
       {/* How it works */}
       <section className={styles.howSection} id="how">
         <div className={styles.howInner}>
-          <div className={styles.sectionLabel}>HOW IT WORKS</div>
+          <div className={styles.sectionLabel}>THE APPROACH</div>
           <h2 className={styles.sectionTitle}>
-            From idea to automation<br />in three steps
+            How we close<br />the productivity gap
           </h2>
           <div className={styles.steps}>
             <Step
               num="1"
-              title="Design your workflow"
-              description="Use the visual builder to map out your process. Connect triggers, AI steps, and actions."
+              title="Diagnose"
+              description="We map where AI tools exist and where productivity stalls. The bottleneck is always in the operational layer — the workflows your people actually run."
             />
             <div className={styles.stepConnector} aria-hidden="true">→</div>
             <Step
               num="2"
-              title="Connect your tools"
-              description="Link your APIs, databases, and SaaS products. Flux handles auth and rate limiting."
+              title="Architect"
+              description="We design the systems that make your AI investments deliver — built around your mission, your constraints, your compliance requirements, and your people."
             />
             <div className={styles.stepConnector} aria-hidden="true">→</div>
             <Step
               num="3"
-              title="Deploy and iterate"
-              description="Go live with one click. Monitor performance, fork versions, and improve continuously."
+              title="Partner"
+              description="We stay. Deploying, iterating, and evolving your workflows as the technology matures and your organization grows. This is where our support stands apart."
             />
           </div>
         </div>
@@ -120,21 +125,21 @@ export default function App() {
       <section className={styles.ctaSection} id="start">
         <div className={styles.ctaGlow} aria-hidden="true" />
         <div className={styles.ctaInner}>
-          <div className={styles.ctaTag}>GET STARTED</div>
+          <div className={styles.ctaTag}>THE PRODUCTIVITY GAP</div>
           <h2 className={styles.ctaTitle}>
-            Your workflows,<br />supercharged.
+            Stop waiting for<br />AI to pay off.
           </h2>
-          <p className={styles.ctaSub}>Free tier. No credit card. Ship in minutes.</p>
-          <a href="#signup" className={styles.btnPrimary}>Create Free Account</a>
+          <p className={styles.ctaSub}>It won't — until the workflows are right. Let's build them.</p>
+          <a href="mailto:hello@mutual-aid.ai" className={styles.btnPrimary}>Start the Conversation</a>
         </div>
       </section>
 
       {/* Footer */}
       <footer className={styles.footerOuter}>
         <div className={styles.footer}>
-          <span className={styles.logo}>FLUX</span>
+          <span className={styles.logo}>MUTUAL AID</span>
           <span className={styles.footerText}>
-            © {new Date().getFullYear()} Flux Technologies, Inc.
+            © {new Date().getFullYear()} Mutual Aid. AI solutions for enterprises and governments.
           </span>
           <div className={styles.footerLinks}>
             <a href="#" className={styles.footerLink}>Privacy</a>
@@ -168,11 +173,11 @@ function Step({ num, title, description }) {
 }
 
 const NODES = [
-  { label: 'Trigger',  type: 'trigger' },
-  { label: 'Extract',  type: 'ai'      },
+  { label: 'Intake',   type: 'trigger' },
+  { label: 'Assess',   type: 'ai'      },
   { label: 'Classify', type: 'ai'      },
-  { label: 'Route',    type: 'logic'   },
-  { label: 'Notify',   type: 'action'  },
+  { label: 'Review',   type: 'logic'   },
+  { label: 'Deploy',   type: 'action'  },
 ]
 
 function WorkflowDiagram() {
