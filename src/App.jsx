@@ -32,12 +32,33 @@ function Reveal({ children, delay = 0, className = '', ...rest }) {
   )
 }
 
+/* ─── Parallax hook (RAF-based, passive scroll) ─── */
+function useParallax(speed = 0.18) {
+  const ref = useRef(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    let ticking = false
+    const onScroll = () => {
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(() => {
+        el.style.transform = `translateY(${window.scrollY * speed}px)`
+        ticking = false
+      })
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [speed])
+  return ref
+}
+
 /* ─── Mode config ─── */
 const MODE = {
   corporate: {
     hero: {
       eyebrow: 'Enterprise AI Solutions',
-      title: s => <>Your AI investments<br /><span className={s}>aren't paying off yet.</span></>,
+      title: (s, ref) => <>Your AI investments<br /><span className={s} ref={ref}>aren't paying off yet.</span></>,
       sub: 'Most enterprises have the tools. Few have the workflows. Mutual Aid builds the operational layer that turns AI capability into measurable business outcomes.',
       cta: 'Request a Briefing',
       cta2: 'See the Framework →',
@@ -66,7 +87,7 @@ const MODE = {
   government: {
     hero: {
       eyebrow: 'Government AI Solutions',
-      title: s => <>AI that serves<br /><span className={s}>the public mission.</span></>,
+      title: (s, ref) => <>AI that serves<br /><span className={s} ref={ref}>the public mission.</span></>,
       sub: 'Government agencies face unique complexity — procurement mandates, compliance requirements, legacy infrastructure, and public accountability. Mutual Aid navigates all of it.',
       cta: 'Schedule a Consultation',
       cta2: 'See the Framework →',
@@ -126,6 +147,18 @@ export default function App() {
   const [mode, setMode] = useState('corporate')
   const [contentVisible, setContentVisible] = useState(true)
   const pendingMode = useRef(null)
+  const accentRef   = useRef(null)
+  const parallaxRef = useParallax(0.14)
+
+  // Re-trigger underline draw animation whenever hero content becomes visible
+  useEffect(() => {
+    if (!contentVisible) return
+    const el = accentRef.current
+    if (!el) return
+    el.style.animation = 'none'
+    void el.offsetHeight // force reflow
+    el.style.animation = ''
+  }, [contentVisible])
 
   function choose(selectedMode) {
     setMode(selectedMode)
@@ -158,6 +191,7 @@ export default function App() {
           className={`${styles.siteInner} ${phase === 'site' ? styles.siteVisible : ''}`}
           data-mode={mode}
         >
+          <ParticleCanvas />
           {/* Nav */}
           <nav className={styles.nav}>
             <div className={styles.navInner}>
@@ -188,12 +222,15 @@ export default function App() {
 
           {/* Hero */}
           <section className={styles.hero}>
-            <div className={`${styles.heroContent} ${contentVisible ? styles.heroContentVisible : styles.heroContentHidden}`}>
+            <div
+              ref={parallaxRef}
+              className={`${styles.heroContent} ${contentVisible ? styles.heroContentVisible : styles.heroContentHidden}`}
+            >
               <div className={styles.heroBadge}>
                 <span className={styles.badgeDot} />
                 {cfg.hero.eyebrow}
               </div>
-              <h1 className={styles.heroTitle}>{cfg.hero.title(styles.heroAccent)}</h1>
+              <h1 className={styles.heroTitle}>{cfg.hero.title(styles.heroAccent, accentRef)}</h1>
               <p className={styles.heroSub}>{cfg.hero.sub}</p>
               <div className={styles.heroActions}>
                 <a href="#start" className={styles.btnPrimary}>{cfg.hero.cta}</a>
@@ -450,4 +487,62 @@ function UQLogo() {
 
 function HeartWatermark() {
   return <PiHeartStraightFill className={styles.heartWatermark} aria-hidden="true" />
+}
+
+/* ─── Particle canvas ─── */
+function ParticleCanvas() {
+  const canvasRef = useRef(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    let animId
+    const COUNT = 52
+    const particles = []
+
+    const resize = () => {
+      canvas.width  = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+
+    const spawn = () => ({
+      x:       Math.random() * window.innerWidth,
+      y:       Math.random() * window.innerHeight,
+      r:       Math.random() * 1.7 + 0.4,
+      vy:      -(Math.random() * 0.32 + 0.08),
+      phase:   Math.random() * Math.PI * 2,
+      opacity: Math.random() * 0.07 + 0.025,
+    })
+
+    resize()
+    for (let i = 0; i < COUNT; i++) particles.push(spawn())
+
+    const draw = (t) => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      for (const p of particles) {
+        p.y += p.vy
+        p.x += Math.sin(t * 0.00055 + p.phase) * 0.28
+        if (p.y < -12) {
+          const fresh = spawn()
+          Object.assign(p, fresh)
+          p.y = canvas.height + 12
+        }
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(184, 50, 50, ${p.opacity})`
+        ctx.fill()
+      }
+      animId = requestAnimationFrame(draw)
+    }
+
+    animId = requestAnimationFrame(draw)
+    window.addEventListener('resize', resize, { passive: true })
+    return () => {
+      cancelAnimationFrame(animId)
+      window.removeEventListener('resize', resize)
+    }
+  }, [])
+
+  return <canvas ref={canvasRef} className={styles.particleCanvas} />
 }

@@ -8,15 +8,15 @@
 /* ===== SCROLL REVEAL ===== */
 .reveal {
   opacity: 0;
-  transform: translateY(18px);
+  transform: translateY(20px) scale(0.97);
   transition:
-    opacity   0.65s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
-    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
+    opacity   0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
 }
 
 .revealIn {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
 /* ===== SPLASH SCREEN ===== */
@@ -334,7 +334,8 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  transition: opacity 0.22s ease, transform 0.22s ease;
+  transition: opacity 0.22s ease;
+  will-change: transform;
 }
 
 .heroContentVisible {
@@ -344,7 +345,6 @@
 
 .heroContentHidden {
   opacity: 0;
-  transform: translateY(6px);
   pointer-events: none;
 }
 
@@ -387,6 +387,12 @@
 .heroAccent {
   color: var(--accent);
   font-style: italic;
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-position: 0 calc(100% + 3px);
+  background-size: 0% 4px;
+  background-repeat: no-repeat;
+  padding-bottom: 5px;
+  animation: underlineExpand 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.82s forwards;
 }
 
 .heroSub {
@@ -843,7 +849,22 @@
 
 .footerLink:hover { color: var(--text-secondary); }
 
+/* ===== PARTICLE CANVAS ===== */
+.particleCanvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+}
+
 /* ===== ANIMATIONS ===== */
+@keyframes underlineExpand {
+  from { background-size: 0% 4px; }
+  to   { background-size: 100% 4px; }
+}
+
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0);     }
