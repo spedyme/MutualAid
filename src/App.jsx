@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback, Fragment } from 'react'
+import { PiHeartStraightFill } from 'react-icons/pi'
 import styles from './App.module.css'
 
 /* ─── Scroll reveal ─── */
@@ -93,6 +94,21 @@ const MODE = {
   },
 }
 
+const DEV_PROJECTS = [
+  {
+    id: 'ecoguide',
+    name: 'EcoGuide',
+    type: 'Visitor Management Software',
+    desc: 'Smart visitor management with AI-powered check-in, compliance tracking, and environmental footprint reporting for facilities and managed sites.',
+  },
+  {
+    id: 'mai',
+    name: 'Mutual Aid Intelligence',
+    type: 'Decentralised AI',
+    desc: 'A decentralised AI infrastructure distributing intelligence across sovereign nodes — resilient, community-governed, and independent of centralised cloud providers.',
+  },
+]
+
 const NODES = [
   { label: 'Intake',   type: 'trigger' },
   { label: 'Assess',   type: 'ai'      },
@@ -145,7 +161,10 @@ export default function App() {
           {/* Nav */}
           <nav className={styles.nav}>
             <div className={styles.navInner}>
-              <span className={styles.logo}>MUTUAL AID</span>
+              <span className={styles.logo}>
+                <PiHeartStraightFill className={styles.logoHeart} aria-hidden="true" />
+                MUTUAL AID
+              </span>
               <div className={styles.navLinks}>
                 <a href="#how"      className={styles.navLink}>Approach</a>
                 <a href="#features" className={styles.navLink}>Solutions</a>
@@ -247,6 +266,49 @@ export default function App() {
             </div>
           </section>
 
+          {/* In Development */}
+          <section className={styles.devSection}>
+            <div className={styles.devInner}>
+              <Reveal><div className={styles.sectionLabel}>CURRENTLY BUILDING</div></Reveal>
+              <Reveal delay={80}>
+                <h2 className={styles.sectionTitle}>Projects in development</h2>
+              </Reveal>
+              <div className={styles.devGrid}>
+                <Reveal delay={120} className={styles.devIframeReveal}>
+                  <div className={styles.iframeWrap}>
+                    <div className={styles.iframeBar}>
+                      <span className={styles.iframeDot} />
+                      <span className={styles.iframeDot} />
+                      <span className={styles.iframeDot} />
+                      <span className={styles.iframeUrl}>tender-board-blond.vercel.app</span>
+                    </div>
+                    <iframe
+                      src="https://tender-board-blond.vercel.app/"
+                      className={styles.tenderFrame}
+                      title="Current project board"
+                      loading="lazy"
+                    />
+                  </div>
+                </Reveal>
+                <div className={styles.devProjects}>
+                  {DEV_PROJECTS.map((proj, i) => (
+                    <Reveal key={proj.id} delay={180 + i * 100}>
+                      <div className={styles.devCard}>
+                        <div className={styles.devStatus}>
+                          <span className={styles.devStatusDot} />
+                          In Development
+                        </div>
+                        <div className={styles.devCardName}>{proj.name}</div>
+                        <div className={styles.devCardType}>{proj.type}</div>
+                        <p className={styles.devCardDesc}>{proj.desc}</p>
+                      </div>
+                    </Reveal>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* CTA */}
           <section className={styles.ctaSection} id="start">
             <HeartWatermark />
@@ -261,7 +323,10 @@ export default function App() {
           {/* Footer */}
           <footer className={styles.footerOuter}>
             <div className={styles.footer}>
-              <span className={styles.logo}>MUTUAL AID</span>
+              <span className={styles.logo}>
+                <PiHeartStraightFill className={styles.logoHeart} aria-hidden="true" />
+                MUTUAL AID
+              </span>
               <span className={styles.footerText}>
                 © {new Date().getFullYear()} Mutual Aid · Backed by UniQuest &amp; The University of Queensland
               </span>
@@ -283,7 +348,10 @@ function SplashScreen({ phase, onChoose }) {
   return (
     <div className={`${styles.splash} ${phase === 'leaving' ? styles.splashLeaving : ''}`}>
       <header className={styles.splashHeader}>
-        <span className={styles.splashLogo}>MUTUAL AID</span>
+        <span className={styles.splashLogo}>
+          <PiHeartStraightFill className={styles.splashLogoHeart} aria-hidden="true" />
+          MUTUAL AID
+        </span>
       </header>
       <div className={styles.splashTaglineWrap}>
         <p className={styles.splashTagline}>
@@ -381,9 +449,5 @@ function UQLogo() {
 }
 
 function HeartWatermark() {
-  return (
-    <svg viewBox="0 0 200 180" fill="none" className={styles.heartWatermark} aria-hidden="true">
-      <path d="M100 160 C60 130 20 105 20 70 C20 45 40 28 65 28 C80 28 92 36 100 46 C108 36 120 28 135 28 C160 28 180 45 180 70 C180 105 140 130 100 160Z" fill="currentColor"/>
-    </svg>
-  )
+  return <PiHeartStraightFill className={styles.heartWatermark} aria-hidden="true" />
 }
