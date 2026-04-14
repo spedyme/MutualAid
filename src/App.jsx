@@ -498,7 +498,7 @@ function ParticleCanvas() {
     if (!canvas) return
     const ctx = canvas.getContext('2d')
     let animId
-    const COUNT = 500
+    const COUNT = 2000
     const particles = []
 
     const resize = () => {
