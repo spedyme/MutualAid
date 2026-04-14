@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, Fragment } from 'react'
 import styles from './App.module.css'
 
-/* ─── Scroll reveal hook ─── */
+/* ─── Scroll reveal ─── */
 function useInView(options = {}) {
   const ref = useRef(null)
   const [inView, setInView] = useState(false)
@@ -17,52 +17,81 @@ function useInView(options = {}) {
   return [ref, inView]
 }
 
-function Reveal({ children, delay = 0, className = '', as: Tag = 'div', ...rest }) {
+function Reveal({ children, delay = 0, className = '', ...rest }) {
   const [ref, inView] = useInView()
   return (
-    <Tag
+    <div
       ref={ref}
       className={`${styles.reveal} ${inView ? styles.revealIn : ''} ${className}`}
       style={{ '--reveal-delay': `${delay}ms` }}
       {...rest}
     >
       {children}
-    </Tag>
+    </div>
   )
 }
 
-/* ─── Data ─── */
-const HERO = {
+/* ─── Mode config ─── */
+const MODE = {
   corporate: {
-    eyebrow: 'Enterprise AI Solutions',
-    title: (s) => <>Your AI investments<br /><span className={s}>aren't paying off yet.</span></>,
-    sub: `Most enterprises have the tools. Few have the workflows. Mutual Aid builds the operational layer that turns AI capability into measurable business outcomes.`,
-    cta: 'Request a Briefing',
-    cta2: 'See the Framework →',
+    hero: {
+      eyebrow: 'Enterprise AI Solutions',
+      title: s => <>Your AI investments<br /><span className={s}>aren't paying off yet.</span></>,
+      sub: 'Most enterprises have the tools. Few have the workflows. Mutual Aid builds the operational layer that turns AI capability into measurable business outcomes.',
+      cta: 'Request a Briefing',
+      cta2: 'See the Framework →',
+    },
+    trust: ['Fortune 500', 'Financial Services', 'Healthcare Systems', 'Technology', 'Manufacturing'],
+    features: [
+      { number: '01', title: 'Workflow Architecture',  description: "Solow said it in 1987 — computers everywhere, productivity nowhere. The gains came when workflows caught up. We build those workflows for AI." },
+      { number: '02', title: 'Enterprise Integration', description: "Connect AI to your CRM, ERP, data warehouse, and systems of record — without rebuilding your stack or disrupting your teams." },
+      { number: '03', title: 'ROI-Driven Deployment',  description: "Every workflow we build is measured against business outcomes. Efficiency, cost reduction, and revenue impact — tracked and reported." },
+      { number: '04', title: 'Organisational Change',  description: "Technology is half the equation. We align leadership and teams around the operational shift that makes AI investment compound." },
+      { number: '05', title: 'Support Without Equal',  description: "We don't hand off a product and walk away. We stay — as your operational partner through every phase, every obstacle, every board review." },
+      { number: '06', title: 'Compounding Returns',    description: "AI capability compounds. Each workflow improvement creates the foundation for the next. We plan for that from day one." },
+    ],
+    steps: [
+      { num: '1', title: 'Diagnose',  description: "We map where AI tools exist and where business outcomes stall. The bottleneck is always in the operational layer — the workflows your people actually run." },
+      { num: '2', title: 'Architect', description: "We design ROI-focused workflows integrated with your existing stack, built around your commercial objectives and built to scale." },
+      { num: '3', title: 'Partner',   description: "We stay. Evolving your workflows through every product cycle, acquisition, and strategic shift. This is where our support stands apart." },
+    ],
+    cta: {
+      tag: 'THE PRODUCTIVITY GAP',
+      title: 'Stop waiting for\nAI to pay off.',
+      sub: "It won't — until the workflows are right. Let's build them.",
+      btn: 'Request a Briefing',
+    },
   },
   government: {
-    eyebrow: 'Government AI Solutions',
-    title: (s) => <>AI that serves<br /><span className={s}>the public mission.</span></>,
-    sub: `Government agencies face unique complexity — procurement mandates, compliance requirements, legacy infrastructure, and public accountability. Mutual Aid navigates all of it.`,
-    cta: 'Schedule a Consultation',
-    cta2: 'See the Framework →',
+    hero: {
+      eyebrow: 'Government AI Solutions',
+      title: s => <>AI that serves<br /><span className={s}>the public mission.</span></>,
+      sub: 'Government agencies face unique complexity — procurement mandates, compliance requirements, legacy infrastructure, and public accountability. Mutual Aid navigates all of it.',
+      cta: 'Schedule a Consultation',
+      cta2: 'See the Framework →',
+    },
+    trust: ['Federal Agencies', 'State Government', 'Public Health', 'Defence', 'Municipal Services'],
+    features: [
+      { number: '01', title: 'Workflow Architecture',   description: "Solow said it in 1987 — computers everywhere, productivity nowhere. The gains came when agencies rebuilt their processes around the technology. We do the same for AI." },
+      { number: '02', title: 'Procurement Navigation',  description: "We understand government buying cycles, framework agreements, and procurement rules. We work inside them — so your projects don't stall at the first compliance hurdle." },
+      { number: '03', title: 'Compliance-First Design', description: "Every workflow is designed to your regulatory framework from the outset — GDPR, security classifications, FOI obligations, and sector-specific mandates." },
+      { number: '04', title: 'Departmental Change',     description: "Bringing civil servants, senior leaders, and elected officials through AI transformation requires a different approach to change. We've built it." },
+      { number: '05', title: 'Support Without Equal',   description: "We don't hand off a product and walk away. We stay — through budget cycles, administration changes, and the long work of improving public services." },
+      { number: '06', title: 'Mission Evolution',       description: "Public sector priorities shift with each administration and spending review. Your workflows evolve with new mandates without rebuilding from scratch." },
+    ],
+    steps: [
+      { num: '1', title: 'Assess', description: "We audit your department's AI readiness — mapping tools, data assets, policies, and the workflows your civil servants actually depend on." },
+      { num: '2', title: 'Design', description: "We build procurement-compliant workflows around your mission constraints, legacy systems, and the practical realities of public sector delivery." },
+      { num: '3', title: 'Embed',  description: "We become part of your team — through budget rounds, machinery of government changes, and the sustained work of public service improvement." },
+    ],
+    cta: {
+      tag: 'THE MISSION GAP',
+      title: 'AI that serves.\nNot just promises.',
+      sub: "Real productivity for real public service — when the workflows are right.",
+      btn: 'Schedule a Consultation',
+    },
   },
 }
-
-const FEATURES = [
-  { number: '01', title: 'Workflow Architecture',   description: 'Solow said it in 1987 — computers everywhere, productivity nowhere. The gains came when workflows caught up. We build those workflows for AI.' },
-  { number: '02', title: 'Government Integration',  description: 'Navigate procurement rules, compliance mandates, legacy infrastructure, and inter-agency complexity — without compromising mission.' },
-  { number: '03', title: 'Enterprise Deployment',   description: 'Purpose-built AI solutions that integrate with your existing stack, your security posture, and your people.' },
-  { number: '04', title: 'Change Management',       description: 'Technology is half the equation. We guide your organisation through the cultural and operational transition that makes AI actually stick.' },
-  { number: '05', title: 'Support Without Equal',   description: 'We don\'t hand off a product and walk away. We stay — as your operational partner through every phase, every obstacle, every iteration. No other firm matches this.' },
-  { number: '06', title: 'Continuous Evolution',    description: 'AI capability compounds. Your workflows evolve alongside it, with Mutual Aid at your side as both the technology and your needs change.' },
-]
-
-const STEPS = [
-  { num: '1', title: 'Diagnose',  description: 'We map where AI tools exist and where productivity stalls. The bottleneck is always in the operational layer — the workflows your people actually run.' },
-  { num: '2', title: 'Architect', description: 'We design the systems that make your AI investments deliver — built around your mission, constraints, compliance requirements, and your people.' },
-  { num: '3', title: 'Partner',   description: 'We stay. Deploying, iterating, and evolving your workflows as the technology matures and your organisation grows. This is where our support stands apart.' },
-]
 
 const NODES = [
   { label: 'Intake',   type: 'trigger' },
@@ -74,160 +103,219 @@ const NODES = [
 
 /* ─── App ─── */
 export default function App() {
-  const [displayMode, setDisplayMode] = useState('corporate')
+  // 'splash' → user sees the entry screen
+  // 'leaving' → splash is fading out, site is mounting
+  // 'site' → site is fully visible
+  const [phase, setPhase] = useState('splash')
+  const [mode, setMode] = useState('corporate')
   const [contentVisible, setContentVisible] = useState(true)
   const pendingMode = useRef(null)
 
+  function choose(selectedMode) {
+    setMode(selectedMode)
+    setPhase('leaving')
+    setTimeout(() => setPhase('site'), 580)
+  }
+
   const switchMode = useCallback((newMode) => {
-    if (newMode === displayMode || pendingMode.current) return
+    if (newMode === mode || pendingMode.current) return
     pendingMode.current = newMode
     setContentVisible(false)
     setTimeout(() => {
-      setDisplayMode(newMode)
+      setMode(newMode)
       setContentVisible(true)
       pendingMode.current = null
     }, 220)
-  }, [displayMode])
+  }, [mode])
 
-  const hero = HERO[displayMode]
+  const cfg = MODE[mode]
 
   return (
     <div className={styles.root}>
 
-      {/* Nav */}
-      <nav className={styles.nav}>
-        <div className={styles.navInner}>
-          <span className={styles.logo}>MUTUAL AID</span>
-          <div className={styles.navLinks}>
-            <a href="#how"      className={styles.navLink}>Approach</a>
-            <a href="#features" className={styles.navLink}>Solutions</a>
-            <a href="#start"    className={styles.navLink}>Contact</a>
-          </div>
-          <a href="#start" className={styles.navCta}>Work With Us</a>
-        </div>
-      </nav>
+      {/* ── Splash ── */}
+      {phase !== 'site' && <SplashScreen phase={phase} onChoose={choose} />}
 
-      {/* Hero */}
-      <section className={styles.hero}>
-        <div className={styles.switcher} role="group" aria-label="Select audience">
-          <button
-            className={displayMode === 'corporate' ? styles.switcherTabActive : styles.switcherTab}
-            onClick={() => switchMode('corporate')}
-          >For Enterprise</button>
-          <button
-            className={displayMode === 'government' ? styles.switcherTabActive : styles.switcherTab}
-            onClick={() => switchMode('government')}
-          >For Government</button>
-        </div>
+      {/* ── Site (renders under splash so fonts/images load) ── */}
+      {phase !== 'splash' && (
+        <div
+          className={`${styles.siteInner} ${phase === 'site' ? styles.siteVisible : ''}`}
+          data-mode={mode}
+        >
+          {/* Nav */}
+          <nav className={styles.nav}>
+            <div className={styles.navInner}>
+              <span className={styles.logo}>MUTUAL AID</span>
+              <div className={styles.navLinks}>
+                <a href="#how"      className={styles.navLink}>Approach</a>
+                <a href="#features" className={styles.navLink}>Solutions</a>
+                <a href="#start"    className={styles.navLink}>Contact</a>
+              </div>
+              {/* Subtle in-nav mode toggle */}
+              <div className={styles.modeToggle} role="group" aria-label="Switch audience">
+                <button
+                  className={mode === 'corporate' ? styles.modeActive : styles.modeBtn}
+                  onClick={() => switchMode('corporate')}
+                >Enterprise</button>
+                <span className={styles.modeSep} aria-hidden="true">·</span>
+                <button
+                  className={mode === 'government' ? styles.modeActive : styles.modeBtn}
+                  onClick={() => switchMode('government')}
+                >Government</button>
+              </div>
+              <a href="#start" className={styles.navCta}>Work With Us</a>
+            </div>
+          </nav>
 
-        <div className={`${styles.heroContent} ${contentVisible ? styles.heroContentVisible : styles.heroContentHidden}`}>
-          <div className={styles.heroBadge}>
-            <span className={styles.badgeDot} />
-            {hero.eyebrow}
-          </div>
-          <h1 className={styles.heroTitle}>
-            {hero.title(styles.heroAccent)}
-          </h1>
-          <p className={styles.heroSub}>{hero.sub}</p>
-          <div className={styles.heroActions}>
-            <a href="#start" className={styles.btnPrimary}>{hero.cta}</a>
-            <a href="#how"   className={styles.btnGhost}>{hero.cta2}</a>
-          </div>
-        </div>
+          {/* Hero */}
+          <section className={styles.hero}>
+            <div className={`${styles.heroContent} ${contentVisible ? styles.heroContentVisible : styles.heroContentHidden}`}>
+              <div className={styles.heroBadge}>
+                <span className={styles.badgeDot} />
+                {cfg.hero.eyebrow}
+              </div>
+              <h1 className={styles.heroTitle}>{cfg.hero.title(styles.heroAccent)}</h1>
+              <p className={styles.heroSub}>{cfg.hero.sub}</p>
+              <div className={styles.heroActions}>
+                <a href="#start" className={styles.btnPrimary}>{cfg.hero.cta}</a>
+                <a href="#how"   className={styles.btnGhost}>{cfg.hero.cta2}</a>
+              </div>
+            </div>
+            <div className={styles.workflowOuter}>
+              <div className={styles.workflowPreview}><WorkflowDiagram /></div>
+            </div>
+          </section>
 
-        <div className={styles.workflowOuter}>
-          <div className={styles.workflowPreview}>
-            <WorkflowDiagram />
-          </div>
-        </div>
-      </section>
-
-      {/* Trust bar */}
-      <div className={styles.trustBar}>
-        <span className={styles.trustLabel}>Deployable across</span>
-        {['Federal Agencies', 'State Government', 'Healthcare Systems', 'Financial Services', 'Enterprise'].map((name, i) => (
-          <Reveal key={name} as="span" delay={i * 60} className={styles.trustName}>{name}</Reveal>
-        ))}
-      </div>
-
-      {/* Backed by */}
-      <section className={styles.backedBy}>
-        <Reveal className={styles.backedLabelWrap}>
-          <span className={styles.backedLabel}>BACKED BY</span>
-        </Reveal>
-        <div className={styles.backedLogos}>
-          <Reveal delay={100}><UniQuestLogo /></Reveal>
-          <Reveal delay={200} className={styles.backedDividerWrap}>
-            <div className={styles.backedDivider} aria-hidden="true" />
-          </Reveal>
-          <Reveal delay={300}><UQLogo /></Reveal>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className={styles.section} id="features">
-        <Reveal><div className={styles.sectionLabel}>WHAT WE DO</div></Reveal>
-        <Reveal delay={80}>
-          <h2 className={styles.sectionTitle}>
-            AI solutions engineered for organisations<br />that can't afford to get it wrong
-          </h2>
-        </Reveal>
-        <div className={styles.featureGrid}>
-          {FEATURES.map((feat, i) => (
-            <Reveal key={feat.number} delay={(i % 3) * 90} className={styles.featureReveal}>
-              <FeatureCard {...feat} />
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {/* How it works */}
-      <section className={styles.howSection} id="how">
-        <div className={styles.howInner}>
-          <Reveal><div className={styles.sectionLabel}>THE APPROACH</div></Reveal>
-          <Reveal delay={80}>
-            <h2 className={styles.sectionTitle}>
-              How we close<br />the productivity gap
-            </h2>
-          </Reveal>
-          <div className={styles.steps}>
-            {STEPS.map((step, i) => (
-              <>
-                {i > 0 && <div key={`c${i}`} className={styles.stepConnector} aria-hidden="true">→</div>}
-                <Reveal key={step.num} delay={i * 120} className={styles.stepReveal}>
-                  <Step {...step} />
-                </Reveal>
-              </>
+          {/* Trust bar */}
+          <div className={styles.trustBar}>
+            <span className={styles.trustLabel}>Deployable across</span>
+            {cfg.trust.map((name, i) => (
+              <Reveal key={name} delay={i * 60} className={styles.trustNameReveal}>
+                <span className={styles.trustName}>{name}</span>
+              </Reveal>
             ))}
           </div>
+
+          {/* Backed by */}
+          <section className={styles.backedBy}>
+            <Reveal><span className={styles.backedLabel}>BACKED BY</span></Reveal>
+            <div className={styles.backedLogos}>
+              <Reveal delay={100}><UniQuestLogo /></Reveal>
+              <Reveal delay={200} className={styles.backedDividerReveal}>
+                <div className={styles.backedDivider} />
+              </Reveal>
+              <Reveal delay={300}><UQLogo /></Reveal>
+            </div>
+          </section>
+
+          {/* Features */}
+          <section className={styles.section} id="features">
+            <Reveal><div className={styles.sectionLabel}>WHAT WE DO</div></Reveal>
+            <Reveal delay={80}>
+              <h2 className={styles.sectionTitle}>
+                AI solutions engineered for organisations<br />that can't afford to get it wrong
+              </h2>
+            </Reveal>
+            <div className={styles.featureGrid}>
+              {cfg.features.map((feat, i) => (
+                <Reveal key={feat.number} delay={(i % 3) * 90} className={styles.featureReveal}>
+                  <FeatureCard {...feat} />
+                </Reveal>
+              ))}
+            </div>
+          </section>
+
+          {/* How it works */}
+          <section className={styles.howSection} id="how">
+            <div className={styles.howInner}>
+              <Reveal><div className={styles.sectionLabel}>THE APPROACH</div></Reveal>
+              <Reveal delay={80}>
+                <h2 className={styles.sectionTitle}>
+                  How we close<br />the productivity gap
+                </h2>
+              </Reveal>
+              <div className={styles.steps}>
+                {cfg.steps.map((step, i) => (
+                  <Fragment key={step.num}>
+                    {i > 0 && <div className={styles.stepConnector} aria-hidden="true">→</div>}
+                    <Reveal delay={i * 120} className={styles.stepReveal}>
+                      <Step {...step} />
+                    </Reveal>
+                  </Fragment>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* CTA */}
+          <section className={styles.ctaSection} id="start">
+            <HeartWatermark />
+            <Reveal className={styles.ctaInner}>
+              <div className={styles.ctaTag}>{cfg.cta.tag}</div>
+              <h2 className={styles.ctaTitle}>{cfg.cta.title}</h2>
+              <p className={styles.ctaSub}>{cfg.cta.sub}</p>
+              <a href="mailto:hello@mutual-aid.ai" className={styles.btnPrimary}>{cfg.cta.btn}</a>
+            </Reveal>
+          </section>
+
+          {/* Footer */}
+          <footer className={styles.footerOuter}>
+            <div className={styles.footer}>
+              <span className={styles.logo}>MUTUAL AID</span>
+              <span className={styles.footerText}>
+                © {new Date().getFullYear()} Mutual Aid · Backed by UniQuest &amp; The University of Queensland
+              </span>
+              <div className={styles.footerLinks}>
+                <a href="#" className={styles.footerLink}>Privacy</a>
+                <a href="#" className={styles.footerLink}>Terms</a>
+                <a href="#" className={styles.footerLink}>Contact</a>
+              </div>
+            </div>
+          </footer>
         </div>
-      </section>
+      )}
+    </div>
+  )
+}
 
-      {/* CTA */}
-      <section className={styles.ctaSection} id="start">
-        <HeartWatermark />
-        <Reveal className={styles.ctaInner}>
-          <div className={styles.ctaTag}>THE PRODUCTIVITY GAP</div>
-          <h2 className={styles.ctaTitle}>Stop waiting for<br />AI to pay off.</h2>
-          <p className={styles.ctaSub}>It won't — until the workflows are right. Let's build them.</p>
-          <a href="mailto:hello@mutual-aid.ai" className={styles.btnPrimary}>Start the Conversation</a>
-        </Reveal>
-      </section>
-
-      {/* Footer */}
-      <footer className={styles.footerOuter}>
-        <div className={styles.footer}>
-          <span className={styles.logo}>MUTUAL AID</span>
-          <span className={styles.footerText}>
-            © {new Date().getFullYear()} Mutual Aid · Backed by UniQuest &amp; The University of Queensland
-          </span>
-          <div className={styles.footerLinks}>
-            <a href="#" className={styles.footerLink}>Privacy</a>
-            <a href="#" className={styles.footerLink}>Terms</a>
-            <a href="#" className={styles.footerLink}>Contact</a>
+/* ─── Splash screen ─── */
+function SplashScreen({ phase, onChoose }) {
+  return (
+    <div className={`${styles.splash} ${phase === 'leaving' ? styles.splashLeaving : ''}`}>
+      <header className={styles.splashHeader}>
+        <span className={styles.splashLogo}>MUTUAL AID</span>
+      </header>
+      <div className={styles.splashTaglineWrap}>
+        <p className={styles.splashTagline}>
+          AI solutions for organisations<br />
+          <em>ready to close the productivity gap.</em>
+        </p>
+      </div>
+      <div className={styles.splashChoices}>
+        <button className={styles.splashChoice} onClick={() => onChoose('corporate')}>
+          <div className={styles.splashChoiceInner}>
+            <span className={styles.splashChoiceEye}>Enterprise</span>
+            <h2 className={styles.splashChoiceHead}>For businesses</h2>
+            <p className={styles.splashChoiceDesc}>
+              Measurable AI outcomes, operational efficiency,
+              and ROI that satisfies the board.
+            </p>
+            <span className={styles.splashChoiceArrow}>Enter →</span>
           </div>
-        </div>
-      </footer>
+        </button>
+        <div className={styles.splashDivider} aria-hidden="true" />
+        <button className={styles.splashChoice} onClick={() => onChoose('government')}>
+          <div className={styles.splashChoiceInner}>
+            <span className={styles.splashChoiceEye}>Government</span>
+            <h2 className={styles.splashChoiceHead}>For agencies</h2>
+            <p className={styles.splashChoiceDesc}>
+              Procurement-compliant AI workflows built around
+              mission, compliance, and public service.
+            </p>
+            <span className={styles.splashChoiceArrow}>Enter →</span>
+          </div>
+        </button>
+      </div>
     </div>
   )
 }
@@ -294,8 +382,7 @@ function UQLogo() {
 
 function HeartWatermark() {
   return (
-    <svg viewBox="0 0 200 180" fill="none" xmlns="http://www.w3.org/2000/svg"
-      className={styles.heartWatermark} aria-hidden="true">
+    <svg viewBox="0 0 200 180" fill="none" className={styles.heartWatermark} aria-hidden="true">
       <path d="M100 160 C60 130 20 105 20 70 C20 45 40 28 65 28 C80 28 92 36 100 46 C108 36 120 28 135 28 C160 28 180 45 180 70 C180 105 140 130 100 160Z" fill="currentColor"/>
     </svg>
   )
