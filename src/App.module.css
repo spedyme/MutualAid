@@ -387,12 +387,8 @@
 .heroAccent {
   color: var(--accent);
   font-style: italic;
-  background-image: linear-gradient(var(--accent), var(--accent));
-  background-position: 0 calc(100% + 3px);
-  background-size: 0% 4px;
-  background-repeat: no-repeat;
-  padding-bottom: 5px;
-  animation: underlineExpand 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.82s forwards;
+  display: inline-block;
+  animation: accentGrow 1.5s cubic-bezier(0.22, 1, 0.36, 1) 3s both;
 }
 
 .heroSub {
@@ -860,9 +856,9 @@
 }
 
 /* ===== ANIMATIONS ===== */
-@keyframes underlineExpand {
-  from { background-size: 0% 4px; }
-  to   { background-size: 100% 4px; }
+@keyframes accentGrow {
+  from { font-size: 1em; }
+  to   { font-size: 1.28em; }
 }
 
 @keyframes fadeUp {
